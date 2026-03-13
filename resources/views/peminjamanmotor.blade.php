@@ -233,7 +233,7 @@
                                 <p class="card-text text-secondary">Kuning metalik · B 1234 ABC</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="h5 text-primary mb-0">Rp 150k/hari</span>
-                                    <a href="/pinjam-motor" class="btn btn-outline-primary rounded-pill">Pilih</a>
+                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
                                 </div>
                             </div>
                         </div>
@@ -244,7 +244,7 @@
                                 <p class="card-text text-secondary">Hitam doff · DK 5678 XYZ</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="h5 text-primary mb-0">Rp 100k/hari</span>
-                                    <a href="/pinjam-motor" class="btn btn-outline-primary rounded-pill">Pilih</a>
+                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
                                 </div>
                             </div>
                         </div>
@@ -255,7 +255,7 @@
                                 <p class="card-text text-secondary">Silver · B 4321 DE</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="h5 text-primary mb-0">Rp 175k/hari</span>
-                                    <a href="/pinjam-motor" class="btn btn-outline-primary rounded-pill">Pilih</a>
+                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
                                 </div>
                             </div>
                         </div>
@@ -266,7 +266,7 @@
                                 <p class="card-text text-secondary">Kuning metalik · B 1234 ABC</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="h5 text-primary mb-0">Rp 150k/hari</span>
-                                    <a href="/pinjam-motor" class="btn btn-outline-primary rounded-pill">Pilih</a>
+                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
                                 </div>
                             </div>
                         </div>
@@ -277,7 +277,7 @@
                                 <p class="card-text text-secondary">Hitam doff · DK 5678 XYZ</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="h5 text-primary mb-0">Rp 100k/hari</span>
-                                    <a href="/pinjam-motor" class="btn btn-outline-primary rounded-pill">Pilih</a>
+                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
                                 </div>
                             </div>
                         </div>
@@ -288,7 +288,7 @@
                                 <p class="card-text text-secondary">Silver · B 4321 DE</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="h5 text-primary mb-0">Rp 175k/hari</span>
-                                    <a href="/pinjam-motor" class="btn btn-outline-primary rounded-pill">Pilih</a>
+                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
                                 </div>
                             </div>
                         </div>
@@ -302,7 +302,7 @@
                                 <p class="card-text text-secondary">Kuning metalik · B 1234 ABC</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="h5 text-primary mb-0">Rp 150k/hari</span>
-                                    <a href="/pinjam-motor" class="btn btn-outline-primary rounded-pill">Pilih</a>
+                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
                                 </div>
                             </div>
                         </div>
@@ -313,7 +313,7 @@
                                 <p class="card-text text-secondary">Hitam doff · DK 5678 XYZ</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="h5 text-primary mb-0">Rp 100k/hari</span>
-                                    <a href="/pinjam-motor" class="btn btn-outline-primary rounded-pill">Pilih</a>
+                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
                                 </div>
                             </div>
                         </div>
@@ -324,7 +324,7 @@
                                 <p class="card-text text-secondary">Silver · B 4321 DE</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="h5 text-primary mb-0">Rp 175k/hari</span>
-                                    <a href="/pinjam-motor" class="btn btn-outline-primary rounded-pill">Pilih</a>
+                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
                                 </div>
                             </div>
                         </div>
@@ -335,7 +335,7 @@
                                 <p class="card-text text-secondary">Kuning metalik · B 1234 ABC</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="h5 text-primary mb-0">Rp 150k/hari</span>
-                                    <a href="/pinjam-motor" class="btn btn-outline-primary rounded-pill">Pilih</a>
+                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
                                 </div>
                             </div>
                         </div>
@@ -346,7 +346,7 @@
                                 <p class="card-text text-secondary">Hitam doff · DK 5678 XYZ</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="h5 text-primary mb-0">Rp 100k/hari</span>
-                                    <a href="/pinjam-motor" class="btn btn-outline-primary rounded-pill">Pilih</a>
+                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
                                 </div>
                             </div>
                         </div>
@@ -357,7 +357,7 @@
                                 <p class="card-text text-secondary">Silver · B 4321 DE</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="h5 text-primary mb-0">Rp 175k/hari</span>
-                                    <a href="/pinjam-motor" class="btn btn-outline-primary rounded-pill">Pilih</a>
+                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
                                 </div>
                             </div>
                         </div>
@@ -368,7 +368,7 @@
                                 <p class="card-text text-secondary">Merah · B 9876 XYZ</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="h5 text-primary mb-0">Rp 200k/hari</span>
-                                    <a href="/pinjam-motor" class="btn btn-outline-primary rounded-pill">Pilih</a>
+                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
                                 </div>
                             </div>
                         </div>
