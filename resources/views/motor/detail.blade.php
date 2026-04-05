@@ -42,38 +42,56 @@
         <div class="row g-5">
             <div class="col-lg-6">
                 <div class="card border-0 shadow-sm rounded-4 overflow-hidden sticky-top" style="top: 20px;">
-                    <img src="{{ asset('images/motors/motor1.jpg') }}" alt="Honda Vario 150" class="img-fluid w-100" style="height: 400px; object-fit: cover;">
+                    <img src="{{ asset('storage/' . $motor->image) }}" alt="{{ $motor->name }}" class="img-fluid w-100" style="height: 400px; object-fit: cover;">
                 </div>
             </div>
 
             <div class="col-lg-6">
-                <h2 class="fw-bold mb-1">Honda Vario 150</h2>
-                <p class="text-secondary fs-5 mb-4">Hitam doff · DK 5678 XYZ</p>
-                
-                <h3 class="text-primary fw-bold mb-4">Rp 100.000 <span class="fs-6 text-secondary fw-normal">/ hari</span></h3>
+                <h2>{{ $motor->brand }} {{ $motor->model }}</h2>
+                <p>{{ $motor->color }} · {{ $motor->plate_number }}</p>
 
-                <div class="inspection-card p-4 mb-4 shadow-sm">
-                    <h5 class="text-warning fw-bold mb-3">
-                        <i class="bi bi-exclamation-triangle-fill me-2"></i>Status Inspeksi Terkini
-                    </h5>
-                    <p class="text-secondary mb-3 small">Pilih semua yang berlaku (Catatan sebelum dipinjam):</p>
-                    
-                    <div class="d-flex flex-wrap gap-2 mb-4">
-                        <span class="badge alert-badge">Ban depan tipis</span>
-                        <span class="badge alert-badge">Lampu sein kiri mati</span>
-                        <span class="badge alert-badge">Bodi lecet (samping kanan)</span>
-                        <span class="badge alert-badge danger">Rem belakang sedikit blong</span>
-                    </div>
+                <h3 class="text-primary">Rp {{ number_format($motor->daily_rate, 0, ',', '.') }} 
+                    <span class="fs-6 text-secondary fw-normal">/ hari</span></h3>
 
-                    <div class="mt-3 pt-3 border-top border-secondary">
-                        <h6 class="fw-bold text-light mb-2"><i class="bi bi-file-earmark-text me-2"></i>Catatan Tambahan Admin</h6>
-                        <p class="text-secondary mb-0 small">"Motor ini baru saja servis rutin ganti oli bulan lalu. Lecet di bodi kanan karena peminjam sebelumnya. Harap berhati-hati dengan rem belakang, gunakan rem depan lebih dominan."</p>
+                <div class="card border-warning border-opacity-50 bg-warning bg-opacity-10 shadow-sm rounded-4 mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="text-dark fw-bold mb-3">
+                            <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Status Inspeksi Terkini
+                        </h5>
+                        <p class="text-secondary small mb-3">Catatan kondisi sebelum dipinjam. Harap diperhatikan:</p>
+                        
+                        <div class="d-flex flex-wrap gap-2 mb-4">
+                            @if($motor->inspection_notes)
+                                @php $tags = explode(',', $motor->inspection_notes); @endphp
+                                @foreach($tags as $tag)
+                                    <span class="badge bg-white text-dark border border-secondary border-opacity-25 shadow-sm fw-medium px-3 py-2 rounded-pill">
+                                        <i class="bi bi-wrench me-1 text-muted"></i> {{ trim($tag) }}
+                                    </span>
+                                @endforeach
+                            @else
+                                <span class="badge bg-success text-white shadow-sm fw-medium px-3 py-2 rounded-pill">
+                                    <i class="bi bi-check-circle me-1"></i>Kondisi Prima (Tidak ada catatan minor)
+                                </span>
+                            @endif
+                        </div>
+
+                        <div class="border-top border-warning border-opacity-25 pt-3">
+                            <h6 class="fw-bold text-dark mb-2"><i class="bi bi-journal-text text-secondary me-2"></i>Catatan Tambahan Admin</h6>
+                            
+                            <div class="bg-white p-3 rounded-3 border border-secondary border-opacity-10 text-secondary small fst-italic shadow-sm">
+                                "{{ $motor->additional_notes ?? 'Motor dalam kondisi standar penyewaan. Siap digunakan.' }}"
+                            </div>
+                            
+                            <p class="text-secondary small mb-0 mt-3 pt-3 border-top border-warning border-opacity-25">
+                                <i class="bi bi-info-circle me-1"></i> Dengan melanjutkan, Anda menyetujui kondisi motor sesuai hasil inspeksi di atas.
+                            </p>
+                        </div>
                     </div>
                 </div>
 
                 <div class="card border-0 bg-white shadow-sm rounded-4 p-4 mt-4">
                     <p class="mb-3 text-muted">Dengan melanjutkan, Anda menyetujui kondisi motor seperti yang tertera pada hasil inspeksi di atas.</p>
-                    <a href="/pinjam-motor" class="btn btn-primary btn-lg rounded-pill w-100 fw-bold">
+                    <a href="/pinjam-motor?motor_id={{ $motor->id }}" class="btn btn-primary btn-lg rounded-pill w-100 fw-bold">
                         <i class="bi bi-check2-circle me-2"></i>Saya Setuju & Lanjut Pinjam
                     </a>
                 </div>

@@ -30,10 +30,10 @@
             box-shadow: 0 4px 14px rgba(13,110,253,0.4);
         }
 
-        /* 1. HERO SECTION (Animasi Dipercepat menjadi 9s) */
+        /* 1. HERO SECTION */
         .hero-section {
             position: relative;
-            animation: bgAnimation 9s infinite; /* Dipercepat dari 18s menjadi 9s */
+            animation: bgAnimation 9s infinite;
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -83,46 +83,6 @@
             color: #0d6efd;
         }
 
-        /* 2. CSS SLIDER MOTOR (Disempurnakan agar Loop Tidak Terputus) */
-        .slider-wrapper {
-            overflow: hidden;
-            width: 100%;
-            padding: 20px 0;
-        }
-        .slider-track {
-            display: flex;
-            width: max-content;
-            animation: scrollLeft 30s linear infinite;
-        }
-        .slider-track:hover {
-            animation-play-state: paused;
-        }
-        .slide-group {
-            display: flex;
-            gap: 1.5rem;
-            padding-right: 1.5rem; /* Menjaga jarak antar grup */
-        }
-        .motor-card {
-            border: none;
-            border-radius: 1.5rem;
-            overflow: hidden;
-            box-shadow: 0 15px 30px -12px rgba(0,0,0,0.15);
-            transition: transform 0.3s;
-            width: 350px;
-            flex-shrink: 0;
-        }
-        .motor-card:hover {
-            transform: scale(1.02);
-        }
-        .motor-card img {
-            height: 200px;
-            object-fit: cover;
-        }
-        @keyframes scrollLeft {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } /* Menggeser persis selebar satu grup */
-        }
-
         .btn-outline-primary {
             border-width: 2px;
             border-radius: 50px;
@@ -136,10 +96,72 @@
         footer a:hover {
             color: white;
         }
+
+        /* --- CSS BARU UNTUK INFINITE SCROLL --- */
+        .horizontal-scroll-wrapper {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .scroll-track {
+            display: flex;
+            gap: 1.5rem;
+            width: max-content;
+            /* Kecepatan putaran: Sesuaikan angka 25s ini jika ingin lebih cepat/lambat */
+            animation: infiniteScroll 25s linear infinite;
+        }
+
+        /* Jeda animasi agar pengguna bisa klik saat mouse berada di atas motor */
+        .scroll-track:hover {
+            animation-play-state: paused;
+        }
+
+        .motor-item {
+            /* Lebar card tetap agar animasinya lancar */
+            flex: 0 0 320px; 
+            transition: all 0.4s ease;
+        }
+
+        .motor-card {
+            border: none;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 15px 30px -12px rgba(0,0,0,0.15);
+            transition: transform 0.3s;
+        }
+
+        .motor-card:hover {
+            transform: scale(1.02);
+        }
+
+        /* Rumus ajaib CSS untuk memutar: menggeser sejauh 50% dari total panjang plus setengah jarak gap */
+        @keyframes infiniteScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-50% - 0.75rem)); } 
+        }
+
+        /* --- PENGATURAN MODE GRID (Saat tombol diklik) --- */
+        .grid-active .scroll-track {
+            animation: none !important; /* Mematikan putaran */
+            flex-wrap: wrap; /* Menyusun ke bawah */
+            justify-content: center;
+            width: 100%;
+        }
+
+        .grid-active .motor-item {
+            flex: 1 1 320px;
+            max-width: 380px;
+        }
+
+        /* Sembunyikan motor kloningan agar tidak ada motor kembar saat di mode grid */
+        .grid-active .clone-item {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
-
     <nav class="navbar navbar-expand-lg navbar-glass sticky-top py-3">
         <div class="container">
             <a class="navbar-brand fw-bold fs-4" href="/">
@@ -167,6 +189,7 @@
                 </ul>
             </div>
         </div>
+        <a href="/cek-pesanan" class="btn btn-outline-primary rounded-pill px-4 fw-medium"><i class="bi bi-receipt me-2"></i>Cek Pesanan</a>
     </nav>
 
     <section class="hero-section">
@@ -215,172 +238,50 @@
         </div>
     </section>
 
-    <section id="motor" class="bg-light py-5 overflow-hidden">
-        <div class="container-fluid py-5 px-0">
+    <section id="motor" class="bg-light py-5">
+        <div class="container py-5">
             <div class="text-center mb-5">
                 <h2 class="fw-bold display-6">Motor Pilihan</h2>
-                <p class="text-secondary">Beberapa motor yang siap menemani perjalananmu</p>
+                <p class="text-secondary">Geser untuk melihat koleksi favorit, atau perluas untuk melihat semuanya.</p>
             </div>
             
-            <div class="slider-wrapper">
-                <div class="slider-track">
-                    
-                    <div class="slide-group">
-                        <div class="card motor-card">
-                            <img src="{{ asset('images/motors/motor1.jpg') }}" alt="Motor 1">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">Kawasaki W175</h5>
-                                <p class="card-text text-secondary">Kuning metalik · B 1234 ABC</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="h5 text-primary mb-0">Rp 150k/hari</span>
-                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
+            <div id="motorContainer" class="horizontal-scroll-wrapper">
+                <div class="scroll-track" id="scrollTrack">
+                    @forelse ($motors as $motor)
+                    <div class="motor-item">
+                        <div class="card motor-card h-100 shadow-sm border-0">
+                            @if($motor->image)
+                                <img src="{{ asset('storage/' . $motor->image) }}" class="card-img-top" style="height: 220px; object-fit: cover;" alt="{{ $motor->model }}" onerror="this.src='https://via.placeholder.com/800x500?text=Gambar+Rusak'">
+                            @else
+                                <div class="bg-secondary text-white d-flex justify-content-center align-items-center rounded-top" style="height: 220px;">
+                                    <i class="bi bi-image text-muted" style="font-size: 4rem;"></i>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="card motor-card">
-                            <img src="{{ asset('images/motors/motor2.jpg') }}" alt="Motor 2">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">Honda Vario 150</h5>
-                                <p class="card-text text-secondary">Hitam doff · DK 5678 XYZ</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="h5 text-primary mb-0">Rp 100k/hari</span>
-                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card motor-card">
-                            <img src="{{ asset('images/motors/motor3.jpg') }}" alt="Motor 3">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">Yamaha NMAX</h5>
-                                <p class="card-text text-secondary">Silver · B 4321 DE</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="h5 text-primary mb-0">Rp 175k/hari</span>
-                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card motor-card">
-                            <img src="{{ asset('images/motors/motor4.jpg') }}" alt="Motor 4">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">Kawasaki W175</h5>
-                                <p class="card-text text-secondary">Kuning metalik · B 1234 ABC</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="h5 text-primary mb-0">Rp 150k/hari</span>
-                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card motor-card">
-                            <img src="{{ asset('images/motors/motor2.jpg') }}" alt="Motor 5">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">Honda Vario 150</h5>
-                                <p class="card-text text-secondary">Hitam doff · DK 5678 XYZ</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="h5 text-primary mb-0">Rp 100k/hari</span>
-                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card motor-card">
-                            <img src="{{ asset('images/motors/motoryamaha.jpg') }}" alt="Motor 6">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">Yamaha NMAX</h5>
-                                <p class="card-text text-secondary">Silver · B 4321 DE</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="h5 text-primary mb-0">Rp 175k/hari</span>
-                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
+                            @endif
+                            
+                            <div class="card-body d-flex flex-column p-4">
+                                <h5 class="card-title fw-bold mb-1">{{ $motor->brand }} {{ $motor->model }}</h5>
+                                <p class="card-text text-secondary mb-3">{{ $motor->color }} · <span class="badge bg-light text-dark border">{{ $motor->plate_number }}</span></p>
+                                
+                                <div class="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
+                                    <span class="h5 text-primary mb-0 fw-bold">Rp {{ number_format($motor->price ?? 0, 0, ',', '.') }}<span class="fs-6 text-secondary fw-normal">/hari</span></span> 
+                                    <a href="/motor/detail/{{ $motor->id }}" class="btn btn-outline-primary rounded-pill px-4">Pilih</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="slide-group">
-                        <div class="card motor-card">
-                            <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Motor 1">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">Kawasaki W175</h5>
-                                <p class="card-text text-secondary">Kuning metalik · B 1234 ABC</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="h5 text-primary mb-0">Rp 150k/hari</span>
-                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card motor-card">
-                            <img src="https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Motor 2">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">Honda Vario 150</h5>
-                                <p class="card-text text-secondary">Hitam doff · DK 5678 XYZ</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="h5 text-primary mb-0">Rp 100k/hari</span>
-                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card motor-card">
-                            <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Motor 3">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">Yamaha NMAX</h5>
-                                <p class="card-text text-secondary">Silver · B 4321 DE</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="h5 text-primary mb-0">Rp 175k/hari</span>
-                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card motor-card">
-                            <img src="C:\Herland\Project\laragon\www\peminjaman-motor\public\images\motors/download (5).jpg" alt="Motor 4">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">Kawasaki W175</h5>
-                                <p class="card-text text-secondary">Kuning metalik · B 1234 ABC</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="h5 text-primary mb-0">Rp 150k/hari</span>
-                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card motor-card">
-                            <img src="public/images/motors/download (6).jpg" alt="Motor 5">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">Honda Vario 150</h5>
-                                <p class="card-text text-secondary">Hitam doff · DK 5678 XYZ</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="h5 text-primary mb-0">Rp 100k/hari</span>
-                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card motor-card">
-                            <img src="public/images/motors/download (7).jpg" alt="Motor 6">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">Yamaha NMAX</h5>
-                                <p class="card-text text-secondary">Silver · B 4321 DE</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="h5 text-primary mb-0">Rp 175k/hari</span>
-                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card motor-card">
-                            <img src="public/images/motors/download (8).jpg" alt="Motor 7">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">Honda CBR 150R</h5>
-                                <p class="card-text text-secondary">Merah · B 9876 XYZ</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="h5 text-primary mb-0">Rp 200k/hari</span>
-                                    <a href="/motor/detail" class="btn btn-outline-primary rounded-pill">Pilih</a>
-                                </div>
-                            </div>
-                        </div>
+                    @empty
+                    <div class="empty-state text-center py-5 w-100">
+                        <i class="bi bi-emoji-frown display-1 text-muted opacity-50 mb-3"></i>
+                        <h4 class="text-muted">Belum ada motor yang tersedia saat ini.</h4>
                     </div>
-
+                    @endforelse
                 </div>
             </div>
 
-            <div class="text-center mt-5">
-                <a href="/pinjam-motor" class="btn btn-primary btn-lg rounded-pill px-5">
-                    <i class="bi bi-bicycle me-2"></i>Lihat Semua Motor
-                </a>
+            <div class="text-center mt-4">
+                <button id="toggleMotorBtn" onclick="toggleView()" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm">
+                    <i class="bi bi-grid-3x3-gap-fill me-2" id="toggleIcon"></i> <span id="toggleText">Lihat Semua Motor</span>
+                </button>
             </div>
         </div>
     </section>
@@ -424,5 +325,44 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const track = document.getElementById("scrollTrack");
+            const emptyState = document.querySelector(".empty-state");
+
+            // Kloning data motor agar animasi berjalan mulus tanpa batas
+            if (track && !emptyState) {
+                const items = Array.from(track.children);
+                
+                // Pastikan jumlah motor cukup untuk digeser, jika kurang dari 4, gandakan lebih banyak
+                const timesToClone = items.length < 4 ? 3 : 1; 
+
+                for (let i = 0; i < timesToClone; i++) {
+                    items.forEach(item => {
+                        let clone = item.cloneNode(true);
+                        clone.classList.add("clone-item"); 
+                        track.appendChild(clone);
+                    });
+                }
+            }
+        });
+
+        function toggleView() {
+            const wrapper = document.getElementById('motorContainer');
+            wrapper.classList.toggle('grid-active');
+
+            const icon = document.getElementById('toggleIcon');
+            const text = document.getElementById('toggleText');
+
+            if (wrapper.classList.contains('grid-active')) {
+                icon.className = 'bi bi-chevron-up me-2';
+                text.innerText = 'Tutup Tampilan Penuh';
+            } else {
+                icon.className = 'bi bi-grid-3x3-gap-fill me-2';
+                text.innerText = 'Lihat Semua Motor';
+            }
+        }
+    </script>
 </body>
 </html>
