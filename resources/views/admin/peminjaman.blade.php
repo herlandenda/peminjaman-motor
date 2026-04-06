@@ -19,7 +19,9 @@
 <div class="container-fluid p-0">
     <div class="row g-0">
         <div class="col-md-2 sidebar p-3">
-            <h4 class="fw-bold mb-4 text-center border-bottom pb-3"><i class="bi bi-bicycle text-primary"></i> AdminPanel</h4>
+             <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="{{ asset('images/motors/IMG_1306.png') }}" alt="logo peminjaman motor" height="60" class="me-2 d-inline-block">
+            </a>
             <a href="/admin/dashboard"><i class="bi bi-speedometer2 me-2"></i> Ringkasan</a>
             <a href="/admin/motor"><i class="bi bi-motorcycle me-2"></i> Kelola Motor</a>
             <a href="/admin/peminjaman" class="active"><i class="bi bi-card-checklist me-2"></i> Data Peminjaman</a>

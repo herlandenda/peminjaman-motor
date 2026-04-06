@@ -34,8 +34,10 @@
 
     <nav class="navbar navbar-light bg-white shadow-sm py-3">
         <div class="container">
-            <a class="navbar-brand fw-bold fs-4" href="/"><i class="bi bi-bicycle me-2 text-primary"></i>Peminjaman Motor<span class="text-primary">.</span></a>
-        </div>
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="{{ asset('images/motors/IMG_1306.png') }}" alt="logo peminjaman motor" height="60" class="me-2 d-inline-block">
+                <span class="fw-bold lh-1">Discipline Or Die<span class="text-primary"> Bali</span></span>
+            </a>        </div>
     </nav>
 
     <div class="container form-container mb-5">

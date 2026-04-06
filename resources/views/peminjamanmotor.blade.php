@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peminjaman Motor</title>
+    <title>Discipline Or Die-Bali</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -164,8 +164,9 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-glass sticky-top py-3">
         <div class="container">
-            <a class="navbar-brand fw-bold fs-4" href="/">
-                <i class="bi bi-bicycle me-2"></i>Peminjaman Motor<span class="text-primary">.</span>
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="{{ asset('images/motors/IMG_1306.png') }}" alt="logo peminjaman motor" height="60" class="me-2 d-inline-block">
+                <span class="fw-bold lh-1">Discipline Or Die<span class="text-primary"> Bali</span></span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -194,7 +195,6 @@
 
     <section class="hero-section">
         <div class="container text-center">
-            <span class="badge bg-primary text-uppercase px-3 py-2 mb-4 rounded-pill">Komunitas Terpercaya</span>
             <h1 class="display-3 fw-bold mb-4">Solusi Kendaraan <span class="text-primary">Modern</span> untuk Komunitas</h1>
             <p class="lead mb-5 mx-auto" style="max-width: 700px;">Sewa motor jadi lebih mudah, cepat, dan transparan. Pilih motormu, isi data, dan langsung gas!</p>
             <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
@@ -291,12 +291,12 @@
             <div class="row gy-4">
                 <div class="col-lg-4">
                     <a class="navbar-brand fw-bold fs-4 text-white" href="/">
-                        <i class="bi bi-bicycle me-2"></i>Peminjaman Motor<span class="text-primary">.</span>
+                        <i class="bi bi-bicycle me-2"></i>Discipine Or Die<span class="text-primary"> Bali</span>
                     </a>
                     <p class="text-secondary mt-3">Solusi peminjaman motor modern untuk komunitas, tanpa ribet dan terpercaya.</p>
                     <div class="d-flex gap-3">
                         <a href="#"><i class="bi bi-facebook fs-5"></i></a>
-                        <a href="#"><i class="bi bi-instagram fs-5"></i></a>
+                        <a href="https://www.instagram.com/rideforunity.id/" target="_blank" class="text-white"><i class="bi bi-instagram fs-5"></i></a>
                         <a href="https://wa.me/6281337977866?text=Halo,%20Admin%20Peminjaman%20Motor,%20saya%20ingin%20bertanya%20seputar%20penyewaan%20motor." target="_blank" class="text-white"><i class="bi bi-whatsapp fs-5"></i></a>
                     </div>
                 </div>
@@ -319,7 +319,7 @@
             </div>
             <hr class="border-secondary mt-4">
             <div class="text-center text-secondary">
-                <p class="mb-0">© 2026 Peminjaman Motor Komunitas. All rights reserved.</p>
+                <p class="mb-0">© 2026 Discipline Or Die Bali. All rights reserved.</p>
             </div>
         </div>
     </footer>

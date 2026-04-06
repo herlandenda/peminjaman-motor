@@ -18,8 +18,10 @@
 
     <nav class="navbar navbar-light bg-white shadow-sm py-3 mb-5">
         <div class="container">
-            <a class="navbar-brand fw-bold fs-4" href="/"><i class="bi bi-bicycle me-2 text-primary"></i>Peminjaman Motor<span class="text-primary">.</span></a>
-            <a href="/" class="btn btn-outline-primary btn-sm rounded-pill px-3"><i class="bi bi-house me-1"></i> Beranda</a>
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="{{ asset('images/motors/IMG_1306.png') }}" alt="logo peminjaman motor" height="60" class="me-2 d-inline-block">
+                <span class="fw-bold lh-1">Discipline Or Die<span class="text-primary"> Bali</span></span>
+            </a>            <a href="/" class="btn btn-outline-primary btn-sm rounded-pill px-3"><i class="bi bi-house me-1"></i> Beranda</a>
         </div>
     </nav>
 
