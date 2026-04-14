@@ -30,11 +30,12 @@
         }
     </style>
 </head>
+
 <body>
 
     <nav class="navbar navbar-dark bg-dark py-3 mb-5">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="/"><i class="bi bi-arrow-left me-2"></i>Kembali ke Beranda</a>
+            <a class="navbar-brand fw-bold" href="/#motor"><i class="bi bi-arrow-left me-2"></i>Kembali ke Pilihan Motor</a>
         </div>
     </nav>
 
@@ -42,8 +43,10 @@
         <div class="row g-5">
             <div class="col-lg-6">
                 <div class="card border-0 shadow-sm rounded-4 overflow-hidden sticky-top" style="top: 20px;">
-                    <img src="{{ asset('storage/' . $motor->image) }}" alt="{{ $motor->name }}" class="img-fluid w-100" style="height: 400px; object-fit: cover;">
-                </div>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#imageModalFull">
+                    <img src="{{ asset('storage/' . $motor->image) }}" alt="{{ $motor->brand }}" class="img-fluid w-100" style="height: 400px; object-fit: cover; cursor: zoom-in;" title="Klik untuk memperbesar">
+                </a>
+            </div>
             </div>
 
             <div class="col-lg-6">
@@ -82,22 +85,39 @@
                                 "{{ $motor->additional_notes ?? 'Motor dalam kondisi standar penyewaan. Siap digunakan.' }}"
                             </div>
                             
-                            <p class="text-secondary small mb-0 mt-3 pt-3 border-top border-warning border-opacity-25">
-                                <i class="bi bi-info-circle me-1"></i> Dengan melanjutkan, Anda menyetujui kondisi motor sesuai hasil inspeksi di atas.
-                            </p>
+                            
                         </div>
                     </div>
                 </div>
 
                 <div class="card border-0 bg-white shadow-sm rounded-4 p-4 mt-4">
-                    <p class="mb-3 text-muted">Dengan melanjutkan, Anda menyetujui kondisi motor seperti yang tertera pada hasil inspeksi di atas.</p>
-                    <a href="/pinjam-motor?motor_id={{ $motor->id }}" class="btn btn-primary btn-lg rounded-pill w-100 fw-bold">
-                        <i class="bi bi-check2-circle me-2"></i>Saya Setuju & Lanjut Pinjam
-                    </a>
+                    @php
+    $sedangDipinjam = \App\Models\Loan::where('motor_id', $motor->id)->where('status', 'active')->exists();
+@endphp
+
+                <p class="bi bi-info-circle me-1 text-secondary small"> Dengan melanjutkan, Anda menyetujui kondisi motor seperti yang tertera pada hasil inspeksi di atas.</p>
+                <a href="/pinjam-motor?motor_id={{ $motor->id }}" class="btn btn-primary w-100 py-3 fw-bold rounded-pill">
+                    <i class="bi bi-calendar-check me-2"></i> Booking Motor Ini
+                </a>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="imageModalFull" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-header border-0 p-0 mb-3 justify-content-end">
+                    <button type="button" class="btn-close btn-close-white fs-4" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1) grayscale(100%) brightness(200%);"></button>
+                </div>
+                <div class="modal-body text-center p-0">
+                    <img src="{{ asset('storage/' . $motor->image) }}" class="img-fluid rounded-3 shadow-lg" alt="Foto Full {{ $motor->brand }}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

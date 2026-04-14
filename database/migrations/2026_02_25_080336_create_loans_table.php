@@ -18,9 +18,9 @@ return new class extends Migration
         $table->foreignId('motor_id')->constrained('motors')->cascadeOnDelete();
         
         // Data Waktu
-        $table->date('loan_date');
-        $table->date('return_date_plan');
-        $table->date('return_date_actual')->nullable(); // Diisi saat motor kembali
+        $table->dateTime('loan_date');
+        $table->dateTime('return_date_plan');
+        $table->dateTime('return_date_actual')->nullable(); // Diisi saat motor kembali
         
         // Kondisi Awal (Saat form peminjaman diisi)
         $table->integer('start_km');
@@ -40,6 +40,11 @@ return new class extends Migration
         $table->string('end_condition_mirrors')->nullable();
         $table->string('end_fuel_level')->nullable();
         $table->string('end_photo_motor')->nullable();
+        // Kondisi Motor Opsional
+        $table->string('photo_right')->nullable();
+        $table->string('photo_left')->nullable();
+        $table->string('photo_front')->nullable();
+        $table->string('photo_back')->nullable();
         
         // Status dan Denda
         $table->integer('fine_amount')->default(0);

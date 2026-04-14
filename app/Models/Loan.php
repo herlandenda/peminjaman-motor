@@ -22,4 +22,21 @@ class Loan extends Model
     {
         return $this->belongsTo(Motor::class);
     }
+
+    protected $fillable = [
+        'customer_id',
+        'motor_id',
+        'loan_date',
+        'return_date_plan',
+        'start_km',
+        'start_fuel_level',
+        'start_photo_motor',
+        'photo_right',
+        'photo_left',
+        'photo_front',
+        'photo_back',
+        'status',
+    ];
+
+
 }

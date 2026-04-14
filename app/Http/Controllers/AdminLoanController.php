@@ -21,7 +21,7 @@ class AdminLoanController extends Controller
         $loan = Loan::findOrFail($id);
         
         // Mengubah status dengan cara yang lebih kebal error
-        $loan->status = 'selesai';
+        $loan->status = 'returned'; // Ganti status menjadi 'returned' (sudah dikembalikan)
         $loan->save();
 
         return redirect('/admin/peminjaman')->with('success', 'Motor berhasil dikembalikan dan status pesanan selesai!');

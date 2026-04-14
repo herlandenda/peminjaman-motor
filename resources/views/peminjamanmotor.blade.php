@@ -166,7 +166,7 @@
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="/">
                 <img src="{{ asset('images/motors/IMG_1306.png') }}" alt="logo peminjaman motor" height="60" class="me-2 d-inline-block">
-                <span class="fw-bold lh-1">Discipline Or Die<span class="text-primary"> Bali</span></span>
+                <span class="fw-bold lh-1">Ride For Unity<span class="text-primary"> Bali</span></span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -174,7 +174,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-lg-center">
                     <li class="nav-item">
-                        <a class="nav-link active" href="/">Beranda</a>
+                        <a class="nav-link active" href="/#">Beranda</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#keunggulan">Tentang</a>
@@ -182,15 +182,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#motor">Motor</a>
                     </li>
-                    <li class="nav-item ms-lg-3">
-                        <a class="btn btn-primary rounded-pill px-4 py-2" href="/pinjam-motor">
-                            <i class="bi bi-bike me-2"></i>Pinjam Sekarang
-                        </a>
-                    </li>
+                   
                 </ul>
+                <a href="/cek-pesanan" class="btn btn-outline-primary rounded-pill px-4 fw-medium"><i class="bi bi-receipt me-2"></i>Cek Pesanan</a>
             </div>
         </div>
-        <a href="/cek-pesanan" class="btn btn-outline-primary rounded-pill px-4 fw-medium"><i class="bi bi-receipt me-2"></i>Cek Pesanan</a>
+        
     </nav>
 
     <section class="hero-section">
@@ -198,7 +195,7 @@
             <h1 class="display-3 fw-bold mb-4">Solusi Kendaraan <span class="text-primary">Modern</span> untuk Komunitas</h1>
             <p class="lead mb-5 mx-auto" style="max-width: 700px;">Sewa motor jadi lebih mudah, cepat, dan transparan. Pilih motormu, isi data, dan langsung gas!</p>
             <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
-                <a href="/pinjam-motor" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fs-6 shadow-lg">
+                <a href="/#motor" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fs-6 shadow-lg">
                     <i class="bi bi-bicycle me-2"></i>Mulai Pinjam Motor
                 </a>
                 <a href="#keunggulan" class="btn btn-outline-light btn-lg rounded-pill px-5 py-3 fs-6">
@@ -264,7 +261,10 @@
                                 
                                 <div class="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
                                     <span class="h5 text-primary mb-0 fw-bold">Rp {{ number_format($motor->price ?? 0, 0, ',', '.') }}<span class="fs-6 text-secondary fw-normal">/hari</span></span> 
-                                    <a href="/motor/detail/{{ $motor->id }}" class="btn btn-outline-primary rounded-pill px-4">Pilih</a>
+                                    @php
+                                        $sedangDipinjam = \App\Models\Loan::where('motor_id', $motor->id)->where('status', 'active')->exists();
+                                    @endphp
+                                    <a href="/motor/detail/{{ $motor->id }}" class="btn btn-sm btn-outline-primary rounded-pill px-4">Pinjam Sekarang</a>                                    
                                 </div>
                             </div>
                         </div>
@@ -291,7 +291,7 @@
             <div class="row gy-4">
                 <div class="col-lg-4">
                     <a class="navbar-brand fw-bold fs-4 text-white" href="/">
-                        <i class="bi bi-bicycle me-2"></i>Discipine Or Die<span class="text-primary"> Bali</span>
+                        <i class="bi bi-bicycle me-2"></i>Ride For Unity<span class="text-primary"> Bali</span>
                     </a>
                     <p class="text-secondary mt-3">Solusi peminjaman motor modern untuk komunitas, tanpa ribet dan terpercaya.</p>
                     <div class="d-flex gap-3">
@@ -364,5 +364,22 @@
             }
         }
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if(session('success'))
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                title: "Pemesanan Berhasil! 🎉",
+                text: "{{ session('success') }}\nSilakan ambil motor sesuai jadwal. Kami juga akan menghubungi Anda via WhatsApp.",
+                icon: "success",
+                confirmButtonColor: "#0d6efd",
+                confirmButtonText: "Siap, Terima Kasih!",
+                backdrop: `rgba(0,0,123,0.4)`
+            });
+        });
+    </script>
+    @endif
 </body>
 </html>

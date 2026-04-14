@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
         body { font-family: 'Inter', sans-serif; background: #f8fafc; }
         .form-container { max-width: 900px; margin: 50px auto; }
@@ -36,7 +37,7 @@
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="/">
                 <img src="{{ asset('images/motors/IMG_1306.png') }}" alt="logo peminjaman motor" height="60" class="me-2 d-inline-block">
-                <span class="fw-bold lh-1">Discipline Or Die<span class="text-primary"> Bali</span></span>
+                <span class="fw-bold lh-1">Ride For Unity<span class="text-primary"> Bali</span></span>
             </a>        </div>
     </nav>
 
@@ -121,14 +122,15 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <div id="notif-motor" class="mt-2 text-danger"></div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Tanggal Pengambilan *</label>
-                                <input type="date" name="loan_date" class="form-control" required>
-                            </div>
+                                <label class="form-label">Tanggal & Jam Pengambilan *</label>
+                                <input type="text" name="loan_date" id="loan_date_input" class="form-control bg-white" placeholder="Pilih Jadwal Ambil..." required>
+                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Rencana Kembali *</label>
-                                <input type="date" name="return_date_plan" class="form-control" required>
+                                <input type="text" name="return_date_plan" id="return_date_input" class="form-control bg-white" placeholder="Pilih Jadwal Kembali..." required>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between mt-4">
@@ -157,8 +159,35 @@
                                 <div class="file-upload-box" onclick="document.getElementById('motorPhoto').click()">
                                     <i class="bi bi-camera fs-3 text-secondary"></i> <p class="mt-2 mb-0">Upload Foto Keseluruhan Motor</p>
                                     <input type="file" id="motorPhoto" name="start_photo_motor" class="form-control" accept="image/*" required>
+
+                                    
                                 </div>
+                                <label class="form-label text-secondary mt-3">Foto Tambahan (Opsional)</label>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <div class="border rounded p-2 text-center bg-light">
+                                            <span class="d-block small text-muted mb-1">Sisi Depan</span>
+                                            <input type="file" name="photo_right" class="form-control form-control-sm" accept="image/*">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="border rounded p-2 text-center bg-light">
+                                            <span class="d-block small text-muted mb-1">Sisi Belakang</span>
+                                            <input type="file" name="photo_left" class="form-control form-control-sm" accept="image/*">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="border rounded p-2 text-center bg-light">
+                                            <span class="d-block small text-muted mb-1">Sisi Kiri</span>
+                                            <input type="file" name="photo_back" class="form-control form-control-sm" accept="image/*">
+                                        </div>
                             </div>
+                            <div class="col-md-6">
+                                            <div class="border rounded p-2 text-center bg-light">
+                                                <span class="d-block small text-muted mb-1">Sisi Kanan</span>
+                                                <input type="file" name="photo_front" class="form-control form-control-sm" accept="image/*">
+                                            </div>
+                                        </div>
                         </div>
 
                         <div class="form-check mt-2 p-3 mb-4 bg-white border border-primary border-opacity-25 rounded-3 shadow-sm">
@@ -181,35 +210,84 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 
     <script>
-        // 1. NAVIGASI FORM NEXT & PREV
-        function nextStep(current) {
-            let stepDiv = document.getElementById('step-' + current);
-            let inputs = stepDiv.querySelectorAll('input[required], select[required], textarea[required]');
-            let isValid = true;
-            
-            inputs.forEach(input => {
-                if (!input.checkValidity()) {
-                    input.reportValidity();
-                    isValid = false;
-                }
-            });
+    // ==========================================
+    // 1. FITUR KALENDER CERDAS (FLATPICKR)
+    // ==========================================
+    document.addEventListener("DOMContentLoaded", function() {
+        const activeLoans = @json($activeLoans ?? []);
+        const motorSelect = document.querySelector('select[name="motor_id"]');
+        const inputPinjam = document.getElementById('loan_date_input');
+        const inputKembali = document.getElementById('return_date_input');
 
-            if (!isValid) return;
+        if(inputPinjam && inputKembali) {
+            let configDasar = {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                minDate: "today",
+                time_24hr: true
+            };
 
-            document.getElementById('step-' + current).classList.remove('active');
-            document.getElementById('step-' + (current + 1)).classList.add('active');
-            document.getElementById('indicator-' + (current + 1)).classList.add('active');
+            let flatpickrPinjam = flatpickr(inputPinjam, configDasar);
+            let flatpickrKembali = flatpickr(inputKembali, configDasar);
+
+            if(motorSelect) {
+                motorSelect.addEventListener('change', function() {
+                    const selectedMotorId = this.value;
+                    let blockedDates = [];
+                    let pesanNotif = ''; // Siapkan keranjang pesan kosong
+
+                    activeLoans.forEach(loan => {
+                        if (loan.motor_id == selectedMotorId) {
+                            // 1. TERJEMAHKAN TANGGAL: Ubah format database menjadi objek Date Javascript
+                            let startDate = new Date(loan.loan_date);
+                            let endDate = new Date(loan.return_date_plan);
+                            
+                            // Masukkan ke daftar blokir kalender
+                            blockedDates.push({ 
+                                from: startDate, 
+                                to: endDate 
+                            });
+
+                            // 2. BUAT PESAN NOTIFIKASI
+                            // Format tanggal agar enak dibaca (Misal: 20 Apr 2026, 12:00)
+                            let options = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+                            let formatTglKembali = endDate.toLocaleDateString('id-ID', options).replace('.', ':');
+
+                            pesanNotif = `
+                                <div class="alert alert-warning py-2 px-3 small mb-0 rounded-3 shadow-sm border-warning">
+                                    <i class="bi bi-info-circle-fill me-1 text-warning"></i> 
+                                    <span class="text-dark">Motor ini sedang dipinjam. Anda hanya bisa membooking untuk jadwal setelah <b>${formatTglKembali} WITA</b>. Jika tidak, pilih motor lain.</span>
+                                </div>
+                            `;
+                        }
+                    });
+
+                    // 3. TAMPILKAN PESAN KE LAYAR
+                    const notifDiv = document.getElementById('notif-motor');
+                    if(notifDiv) notifDiv.innerHTML = pesanNotif;
+
+                    // 4. UPDATE KALENDER DENGAN TANGGAL YANG SUDAH DITERJEMAHKAN
+                    const newConfig = { ...configDasar, disable: blockedDates };
+
+                    flatpickrPinjam.destroy();
+                    flatpickrKembali.destroy();
+                    
+                    flatpickrPinjam = flatpickr(inputPinjam, newConfig);
+                    flatpickrKembali = flatpickr(inputKembali, newConfig);
+                    
+                    inputPinjam.value = '';
+                    inputKembali.value = '';
+                });
+            }
         }
 
-        function prevStep(current) {
-            document.getElementById('step-' + current).classList.remove('active');
-            document.getElementById('step-' + (current - 1)).classList.add('active');
-            document.getElementById('indicator-' + current).classList.remove('active');
-        }
-
-        // Tampilkan nama file setelah dipilih
+        // ==========================================
+        // 2. PREVIEW NAMA FILE UPLOAD
+        // ==========================================
         document.querySelectorAll('.file-upload-box input[type="file"]').forEach(input => {
             input.addEventListener('change', function() {
                 const parent = this.closest('.file-upload-box');
@@ -224,63 +302,94 @@
                 }
             });
         });
+    });
 
-        // 2. LOGIKA PELACAK NOMOR HP (AJAX)
-        function cekNomorHp() {
-            let phone = document.getElementById('phone_number').value;
-            let btn = document.getElementById('btnCekNomor');
-
-            if(phone.trim() === '') {
-                alert('Silakan masukkan nomor WhatsApp Anda terlebih dahulu!');
-                return;
+    // ==========================================
+    // 3. NAVIGASI FORM NEXT & PREV
+    // ==========================================
+    function nextStep(current) {
+        let stepDiv = document.getElementById('step-' + current);
+        let inputs = stepDiv.querySelectorAll('input[required], select[required], textarea[required]');
+        let isValid = true;
+        
+        inputs.forEach(input => {
+            if (!input.checkValidity()) {
+                input.reportValidity();
+                isValid = false;
             }
+        });
 
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Mencari...';
-            btn.disabled = true;
+        if (!isValid) return;
 
-            fetch('/cek-pelanggan/' + phone)
-                .then(response => response.json())
-                .then(data => {
-                    let formBaru = document.getElementById('formPelangganBaru');
-                    let lamaAlert = document.getElementById('lamaAlert');
-                    
-                    let inputKtp = document.getElementById('ktp_image');
-                    let inputSim = document.getElementById('sim_image');
-                    let inputName = document.getElementById('name');
-                    let inputAddress = document.getElementById('address');
+        document.getElementById('step-' + current).classList.remove('active');
+        document.getElementById('step-' + (current + 1)).classList.add('active');
+        document.getElementById('indicator-' + (current + 1)).classList.add('active');
+    }
 
-                    if(data.status === 'found') {
-                        lamaAlert.classList.remove('d-none'); 
-                        document.getElementById('lamaName').innerText = data.name;
-                        document.getElementById('existing_customer_id').value = data.customer_id; 
+    function prevStep(current) {
+        document.getElementById('step-' + current).classList.remove('active');
+        document.getElementById('step-' + (current - 1)).classList.add('active');
+        document.getElementById('indicator-' + current).classList.remove('active');
+    }
 
-                        formBaru.classList.add('d-none');
-                        inputKtp.removeAttribute('required');
-                        inputSim.removeAttribute('required');
-                        inputName.removeAttribute('required');
-                        inputAddress.removeAttribute('required');
-                    } else {
-                        lamaAlert.classList.add('d-none'); 
-                        document.getElementById('existing_customer_id').value = '';
+    // ==========================================
+    // 4. LOGIKA PELACAK NOMOR HP (AJAX)
+    // ==========================================
+    function cekNomorHp() {
+        let phone = document.getElementById('phone_number').value;
+        let btn = document.getElementById('btnCekNomor');
 
-                        formBaru.classList.remove('d-none');
-                        inputKtp.setAttribute('required', 'required');
-                        inputSim.setAttribute('required', 'required');
-                        inputName.setAttribute('required', 'required');
-                        inputAddress.setAttribute('required', 'required');
-
-                        alert('Nomor baru terdeteksi. Silakan lengkapi data diri & dokumen Anda di bawah.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Terjadi kesalahan pada server saat mengecek nomor.');
-                })
-                .finally(() => {
-                    btn.innerHTML = '<i class="bi bi-search me-1"></i> Cek Data';
-                    btn.disabled = false;
-                });
+        if(phone.trim() === '') {
+            alert('Silakan masukkan nomor WhatsApp Anda terlebih dahulu!');
+            return;
         }
-    </script>
+
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Mencari...';
+        btn.disabled = true;
+
+        fetch('/cek-pelanggan/' + phone)
+            .then(response => response.json())
+            .then(data => {
+                let formBaru = document.getElementById('formPelangganBaru');
+                let lamaAlert = document.getElementById('lamaAlert');
+                
+                let inputKtp = document.getElementById('ktp_image');
+                let inputSim = document.getElementById('sim_image');
+                let inputName = document.getElementById('name');
+                let inputAddress = document.getElementById('address');
+
+                if(data.status === 'found') {
+                    lamaAlert.classList.remove('d-none'); 
+                    document.getElementById('lamaName').innerText = data.name;
+                    document.getElementById('existing_customer_id').value = data.customer_id; 
+
+                    formBaru.classList.add('d-none');
+                    inputKtp.removeAttribute('required');
+                    inputSim.removeAttribute('required');
+                    inputName.removeAttribute('required');
+                    inputAddress.removeAttribute('required');
+                } else {
+                    lamaAlert.classList.add('d-none'); 
+                    document.getElementById('existing_customer_id').value = '';
+
+                    formBaru.classList.remove('d-none');
+                    inputKtp.setAttribute('required', 'required');
+                    inputSim.setAttribute('required', 'required');
+                    inputName.setAttribute('required', 'required');
+                    inputAddress.setAttribute('required', 'required');
+
+                    alert('Nomor baru terdeteksi. Silakan lengkapi data diri & dokumen Anda di bawah.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan pada server saat mengecek nomor.');
+            })
+            .finally(() => {
+                btn.innerHTML = '<i class="bi bi-search me-1"></i> Cek Data';
+                btn.disabled = false;
+            });
+    }
+    </script>    
 </body>
 </html>
